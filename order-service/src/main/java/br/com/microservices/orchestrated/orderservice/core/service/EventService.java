@@ -1,12 +1,17 @@
 package br.com.microservices.orchestrated.orderservice.core.service;
 
+import br.com.microservices.orchestrated.orderservice.config.exception.ValidationException;
 import br.com.microservices.orchestrated.orderservice.core.document.Event;
+import br.com.microservices.orchestrated.orderservice.core.dto.EventFilters;
 import br.com.microservices.orchestrated.orderservice.core.repository.EventRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Slf4j
 @Service
@@ -20,7 +25,38 @@ public class EventService {
         event.setOrderId(event.getId());
         event.setCreatedAt(LocalDateTime.now());
         save(event);
-        log.info("Order {} with safa notified! TransactionID: {}", event.getOrderId(), event.getTransactionId());
+        log.info("Order {} with saga notified! TransactionID: {}", event.getOrderId(), event.getTransactionId());
+    }
+
+    public List<Event> findAll(){
+        return repository.findAllByOrderByCreatedAtDesc();
+    }
+
+    public Event findByFilters(EventFilters filters){
+        validateEmptyFilters(filters);
+        if (!isEmpty(filters.getOrderId())){
+            return findByOrderId(filters.getOrderId());
+        } else {
+            return findByTransactionId(filters.getTransactionId());
+        }
+    }
+
+    private Event findByOrderId(String orderId){
+        return repository
+                .findTop1ByOrderIdOrderByCratedAtDesc(orderId)
+                .orElseThrow(() -> new ValidationException("Event not found by orderId."));
+    }
+
+    private Event findByTransactionId(String transactionId){
+        return repository
+                .findTop1ByTransactionIdOrderByCratedAtDesc(transactionId)
+                .orElseThrow(() -> new ValidationException("Event not found by transactionId."));
+    }
+
+    public void validateEmptyFilters(EventFilters filters){
+        if (isEmpty(filters.getOrderId()) && isEmpty(filters.getTransactionId())){
+            throw new ValidationException("OrderID or TransactionId must be informed.");
+        }
     }
 
 
