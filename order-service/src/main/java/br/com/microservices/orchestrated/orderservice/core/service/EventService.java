@@ -43,20 +43,20 @@ public class EventService {
 
     private Event findByOrderId(String orderId){
         return repository
-                .findTop1ByOrderIdOrderByCratedAtDesc(orderId)
+                .findTop1ByOrderIdOrderByCreatedAtDesc(orderId)
                 .orElseThrow(() -> new ValidationException("Event not found by orderId."));
-    }
-
-    private Event findByTransactionId(String transactionId){
-        return repository
-                .findTop1ByTransactionIdOrderByCratedAtDesc(transactionId)
-                .orElseThrow(() -> new ValidationException("Event not found by transactionId."));
     }
 
     public void validateEmptyFilters(EventFilters filters){
         if (isEmpty(filters.getOrderId()) && isEmpty(filters.getTransactionId())){
             throw new ValidationException("OrderID or TransactionId must be informed.");
         }
+    }
+
+    private Event findByTransactionId(String transactionId){
+        return repository
+                .findTop1ByTransactionIdOrderByCreatedAtDesc(transactionId)
+                .orElseThrow(() -> new ValidationException("Event not found by transactionId."));
     }
 
 
