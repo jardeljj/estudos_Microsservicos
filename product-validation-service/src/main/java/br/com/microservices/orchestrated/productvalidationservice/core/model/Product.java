@@ -18,6 +18,6 @@ public class Product {
     private Integer id;
 
     @Column(nullable = false)
-    private Integer code;
+    private String code;
 
 }
