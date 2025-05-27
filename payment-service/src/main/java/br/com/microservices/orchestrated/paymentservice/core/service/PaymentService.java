@@ -126,10 +126,14 @@ public class PaymentService {
     }
 
     public void realizeRefound(Event event){
-        changePaymentStatusToRefound(event);
         event.setStatus(FAIL);
         event.setSource(CURRENT_SOURCE);
-        addHistory(event, "Rollback executed for payment");
+        try {
+            changePaymentStatusToRefound(event);
+            addHistory(event, "Rollback executed for payment");
+        } catch (Exception ex){
+            addHistory(event, "Rollback not executed for payment: ".concat(ex.getMessage()));
+        }
         producer.sendEvent(jsonUtil.toJson(event));
     }
 
