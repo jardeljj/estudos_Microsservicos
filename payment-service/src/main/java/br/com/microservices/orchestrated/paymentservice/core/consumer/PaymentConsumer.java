@@ -33,7 +33,7 @@ public class PaymentConsumer {
     public void consumeFailEvent(String payload){
         log.info("Receiving rollback event {} from payment-fail topic", payload);
         var event = jsonUtil.toEvent(payload);
-        paymentService.realizeRefound(event);
+        paymentService.realizeRefund(event);
     }
 
 }

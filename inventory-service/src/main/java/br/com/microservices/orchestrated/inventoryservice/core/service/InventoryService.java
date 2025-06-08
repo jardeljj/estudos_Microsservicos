@@ -58,10 +58,18 @@ public class InventoryService {
         });
     }
 
-    private OrderInventory createOrderInventory(Event event, OrderProducts product, Inventory inventory){
-        return OrderInventory.builder().inventory(inventory).oldQuantity(inventory.getAvailable())
-                .orderQuantity(product.getQuantity()).newQuantity(inventory.getAvailable() - product.getQuantity())
-                .orderId(event.getPayload().getId()).transactionId(event.getTransactionId()).build();
+    private OrderInventory createOrderInventory(Event event,
+                                                OrderProducts product,
+                                                Inventory inventory) {
+        return OrderInventory
+                .builder()
+                .inventory(inventory)
+                .oldQuantity(inventory.getAvailable())
+                .orderQuantity(product.getQuantity())
+                .newQuantity(inventory.getAvailable() - product.getQuantity())
+                .orderId(event.getPayload().getId())
+                .transactionId(event.getTransactionId())
+                .build();
     }
 
     private void updateInventory(Order order){

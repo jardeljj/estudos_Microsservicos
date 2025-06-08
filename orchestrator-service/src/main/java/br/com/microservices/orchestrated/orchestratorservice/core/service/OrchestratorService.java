@@ -77,7 +77,7 @@ public class OrchestratorService {
     }
 
     private void notifyFinishedSaga(Event event){
-        producer.sendEvent(jsonUtil.toJson(event), NOTIFY_ENDING.getTopic());
+        producer.sendEvent(jsonUtil.toJson(event), ETopics.NOTIFY_ENDING.getTopic());
     }
 
 }
