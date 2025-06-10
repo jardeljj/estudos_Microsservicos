@@ -62,7 +62,7 @@ Toda a arquitetura é gerenciada via Docker Compose para facilitar a execução 
 - [🍃 MongoDB Docs](https://www.mongodb.com/pt-br/docs/)
 
 ## 🚧 Status do Projeto
-🚀 Em andamento 🚧
+🚀 Finalizado ✅
 
 -JardelDev
 
